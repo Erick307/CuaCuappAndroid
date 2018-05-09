@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "966993293123",
+    "firebase_url": "https://cuacuapp-308.firebaseio.com",
+    "project_id": "cuacuapp-308",
+    "storage_bucket": "cuacuapp-308.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:966993293123:android:ff5ce37d92e2b94d",
+        "android_client_info": {
+          "package_name": "com.ericksilva.cuacuapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "966993293123-o1tf5lvbdi0g7om945t68o8mnkuosd5l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTY9w7quv6IvCFki45VpXFYzlAqP_w6Dw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

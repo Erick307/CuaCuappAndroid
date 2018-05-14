@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "966993293123-3skujqec8ekj0css951ug7tt658cl2uc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ericksilva.cuacuapp",
+            "certificate_hash": "6d397b797d84e9f9e9f058f0933cf529b2da64b5"
+          }
+        },
+        {
           "client_id": "966993293123-o1tf5lvbdi0g7om945t68o8mnkuosd5l.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "966993293123-o1tf5lvbdi0g7om945t68o8mnkuosd5l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

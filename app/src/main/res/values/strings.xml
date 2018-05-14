@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">CuaCuapp</string>
+
+    <!-- Facebook Application ID-->
+    <string name="facebook_application_id" translatable="false">179986389373894</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb179986389373894</string>
 </resources>

@@ -6,10 +6,14 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.ericksilva.cuacuapp.R;
-import com.ericksilva.cuacuapp.activities.MainActivity;
+import com.ericksilva.cuacuapp.activities.dashboard.CuacListActivity;
+import com.ericksilva.cuacuapp.models.User;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
 
@@ -26,10 +30,10 @@ public class OnboardingActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        openFirebaseLogin();
+        checkFirebaseLogin();
     }
 
-    private void openFirebaseLogin(){
+    private void checkFirebaseLogin(){
 
         startActivityForResult(
                 AuthUI.getInstance()
@@ -50,7 +54,8 @@ public class OnboardingActivity extends AppCompatActivity {
             IdpResponse response = IdpResponse.fromResultIntent(data);
 
             if (resultCode == RESULT_OK) {
-                startActivity(MainActivity.createIntent(this));
+                createUser(response);
+                startActivity(CuacListActivity.createIntent(this));
                 finish();
             } else {
                 // Sign in failed
@@ -68,6 +73,17 @@ public class OnboardingActivity extends AppCompatActivity {
 //                showSnackbar(R.string.unknown_error);
                 Log.e("LOGIN", "Sign-in error: ", response.getError());
             }
+        }
+    }
+
+    private void createUser(IdpResponse response ){
+        if (response!= null){
+            User user = new User(response.getUser().getName(),response.getEmail(),0);
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+            String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            db.collection("users").document(uid).set(user.getMap());
+
         }
     }
 }

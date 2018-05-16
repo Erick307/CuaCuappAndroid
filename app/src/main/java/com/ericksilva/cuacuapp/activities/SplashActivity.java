@@ -5,16 +5,10 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.crashlytics.android.Crashlytics;
 import com.ericksilva.cuacuapp.R;
-import com.ericksilva.cuacuapp.activities.login.LoginActivity;
+import com.ericksilva.cuacuapp.activities.dashboard.CuacListActivity;
 import com.ericksilva.cuacuapp.activities.onbording.OnboardingActivity;
-import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.Arrays;
-
-import io.fabric.sdk.android.Fabric;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -38,13 +32,12 @@ public class SplashActivity extends AppCompatActivity {
         @Override
         public void run() {
 
-
 //            Crashlytics.getInstance().crash();
 
             Intent intent;
             FirebaseAuth auth = FirebaseAuth.getInstance();
             if (auth.getCurrentUser() != null) {
-                intent = new Intent(SplashActivity.this,MainActivity.class);
+                intent = new Intent(SplashActivity.this,CuacListActivity.class);
             } else {
                 // not signed in
                 intent = new Intent(SplashActivity.this,OnboardingActivity.class);

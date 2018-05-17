@@ -9,18 +9,19 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
 import com.ericksilva.cuacuapp.R;
 import com.ericksilva.cuacuapp.activities.MainActivity;
 import com.ericksilva.cuacuapp.models.Cuac;
-import com.google.firebase.FirebaseApp;
+import com.github.clans.fab.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -31,7 +32,8 @@ public class CuacListActivity extends AppCompatActivity {
     private List<Cuac> cuacList = new ArrayList<>();
     private RecyclerView recyclerView;
     private CuacsAdapter cuacsAdapter;
-    private CollectionReference cuacRef;
+    private CollectionReference cuacsRef;
+    private FloatingActionButton btnAdd;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -47,6 +49,9 @@ public class CuacListActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recycler_view);
 
+        btnAdd = findViewById(R.id.btn_add);
+        btnAdd.setOnClickListener(onClickAddListener);
+
         cuacsAdapter = new CuacsAdapter(cuacList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -59,25 +64,42 @@ public class CuacListActivity extends AppCompatActivity {
         super.onStart();
 
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        cuacRef = db.collection("users/"+ uid +"/cuacs");
-        cuacRef.addSnapshotListener(this, new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-
-                cuacList.clear();
-
-                if (e!= null){
-                    Log.e("FireError",e.getLocalizedMessage());
-                }
-
-                if (queryDocumentSnapshots == null || queryDocumentSnapshots.isEmpty()) return;
-
-                for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()){
-                    Cuac cuac = new Cuac(documentSnapshot);
-                    cuacList.add(cuac);
-                }
-                cuacsAdapter.notifyDataSetChanged();
-            }
-        });
+        cuacsRef = db.collection("users/"+ uid +"/cuacs");
+        cuacsRef.addSnapshotListener(this, eventListener);
     }
+
+
+    EventListener eventListener = new EventListener<QuerySnapshot>() {
+        @Override
+        public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+
+            cuacList.clear();
+
+            if (e!= null){
+                Log.e("FireError",e.getLocalizedMessage());
+            }
+
+            if (queryDocumentSnapshots == null || queryDocumentSnapshots.isEmpty()) return;
+
+            for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()){
+                Cuac cuac = new Cuac(documentSnapshot);
+                cuacList.add(cuac);
+            }
+            cuacsAdapter.notifyDataSetChanged();
+        }
+    };
+
+    View.OnClickListener onClickAddListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+
+            Cuac cuac = new Cuac();
+            cuac.name = "Alto cuac";
+            cuac.type = "geo";
+            cuac.power = 2;
+            cuac.point = new GeoPoint(-34.9112362,-58.5719947);
+            cuacsRef.add(cuac.getMap());
+
+        }
+    };
 }

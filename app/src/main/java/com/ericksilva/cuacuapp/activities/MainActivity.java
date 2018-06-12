@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.ericksilva.cuacuapp.R;
-import com.ericksilva.cuacuapp.activities.onbording.OnboardingActivity;
 
 
 public class MainActivity extends AppCompatActivity {

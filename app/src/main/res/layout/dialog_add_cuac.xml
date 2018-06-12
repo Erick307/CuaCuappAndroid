@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:background="@color/colorPrimaryDark">
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:background="@color/colorPrimaryDark"
+        >
+
+        <RelativeLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginBottom="10dp"
+            >
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/map"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                />
+
+            <ImageView
+                android:layout_centerInParent="true"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/circle"
+                />
+        </RelativeLayout>
+
+        <SeekBar
+            android:id="@+id/zoom_seek_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="800"
+            android:progress="12"
+            android:layout_marginBottom="10dp"
+            />
+
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="Guardar"
+            android:background="@color/colorAccent"
+            android:textColor="#FFFFFF"
+            />
+
+    </LinearLayout>
+
+</RelativeLayout>

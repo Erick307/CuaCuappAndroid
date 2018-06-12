@@ -1,6 +1,8 @@
 package com.ericksilva.cuacuapp.activities.dashboard;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +37,9 @@ public class CuacListActivity extends AppCompatActivity {
     private CollectionReference cuacsRef;
     private FloatingActionButton btnAdd;
 
+    private AddCuacDialog dialog;
+    private View shadow;
+
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public static Intent createIntent(Context context){
@@ -57,6 +62,8 @@ public class CuacListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(cuacsAdapter);
+
+        shadow = findViewById(R.id.shadow);
     }
 
     @Override
@@ -93,13 +100,26 @@ public class CuacListActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
 
-            Cuac cuac = new Cuac();
-            cuac.name = "Alto cuac";
-            cuac.type = "geo";
-            cuac.power = 2;
-            cuac.point = new GeoPoint(-34.9112362,-58.5719947);
-            cuacsRef.add(cuac.getMap());
+            shadow.setVisibility(View.VISIBLE);
+            dialog = new AddCuacDialog();
+            dialog.showDialog(CuacListActivity.this,cancelListener);
+            dialog.setAddCuacListener(addCuacListener);
 
+        }
+    };
+
+    AddCuacDialog.OnAddCuacListener addCuacListener = new AddCuacDialog.OnAddCuacListener() {
+        @Override
+        public void addCuac(Cuac cuac) {
+            cuacsRef.add(cuac.getMap());
+            shadow.setVisibility(View.GONE);
+        }
+    };
+
+    DialogInterface.OnCancelListener cancelListener = new DialogInterface.OnCancelListener() {
+        @Override
+        public void onCancel(DialogInterface dialogInterface) {
+            shadow.setVisibility(View.GONE);
         }
     };
 }

@@ -30,7 +30,7 @@
             android:id="@+id/btn_geo"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:text="GeoCuac"
+            android:text="Siguiente"
             android:background="@color/colorAccent"
             android:textColor="#FFFFFF"
             android:layout_margin="5dp"
@@ -44,6 +44,7 @@
             android:background="@color/colorAccent"
             android:textColor="#FFFFFF"
             android:layout_margin="5dp"
+            android:visibility="gone"
             />
 
         <Button
@@ -54,6 +55,7 @@
             android:background="@color/colorAccent"
             android:textColor="#FFFFFF"
             android:layout_margin="5dp"
+            android:visibility="gone"
             />
 
     </LinearLayout>

@@ -32,6 +32,8 @@ public class AddCuacDialog {
 
     private Dialog dialog;
     private Dialog dialogGeo;
+    private Dialog dialogSpecific;
+    private Dialog dialogRecurrent;
 
     private EditText txtTitle;
 
@@ -82,7 +84,29 @@ public class AddCuacDialog {
 
         dialogGeo.findViewById(R.id.btn_save).setOnClickListener(onAddGeoClickListener);
         dialogGeo.show();
+    }
 
+    private void showSpecificDialog(){
+//        dialogSpecific
+//        dialogGeo = new Dialog(mActivity);
+//        dialogGeo.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        dialogGeo.setCancelable(true);
+//        dialogGeo.setContentView(R.layout.dialog_add_geo_cuac);
+//        dialogGeo.setOnCancelListener(onCancelListener);
+//
+//        Window w = dialogGeo.getWindow();
+//        w.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+//
+//        MapView mMapView = (MapView) dialogGeo.findViewById(R.id.map);
+//        MapsInitializer.initialize(mActivity);
+//        mMapView.onCreate(dialogGeo.onSaveInstanceState());
+//        mMapView.onResume();
+//        mMapView.getMapAsync(onMapReadyCallback);
+//
+//        sbZoom = dialogGeo.findViewById(R.id.zoom_seek_bar);
+//
+//        dialogGeo.findViewById(R.id.btn_save).setOnClickListener(onAddGeoClickListener);
+//        dialogGeo.show();
     }
 
 
@@ -159,6 +183,7 @@ public class AddCuacDialog {
                     break;
                 case R.id.btn_recurrent:
                     type = "recurrent";
+                    showSpecificDialog();
                     break;
                 case R.id.btn_specific:
                     type = "specific";

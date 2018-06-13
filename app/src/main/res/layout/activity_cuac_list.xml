@@ -24,7 +24,8 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:tag="0"
-
+        app:fab_colorNormal="@color/colorAccent"
+        app:fab_colorPressed="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

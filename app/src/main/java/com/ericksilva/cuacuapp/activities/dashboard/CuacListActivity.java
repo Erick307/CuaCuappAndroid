@@ -100,9 +100,9 @@ public class CuacListActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
 
-            shadow.setVisibility(View.VISIBLE);
+//            shadow.setVisibility(View.VISIBLE);
             dialog = new AddCuacDialog();
-            dialog.showDialog(CuacListActivity.this,cancelListener);
+            dialog.show(CuacListActivity.this);
             dialog.setAddCuacListener(addCuacListener);
 
         }
@@ -112,14 +112,14 @@ public class CuacListActivity extends AppCompatActivity {
         @Override
         public void addCuac(Cuac cuac) {
             cuacsRef.add(cuac.getMap());
-            shadow.setVisibility(View.GONE);
+//            shadow.setVisibility(View.GONE);
         }
     };
 
-    DialogInterface.OnCancelListener cancelListener = new DialogInterface.OnCancelListener() {
-        @Override
-        public void onCancel(DialogInterface dialogInterface) {
-            shadow.setVisibility(View.GONE);
-        }
-    };
+//    DialogInterface.OnCancelListener cancelListener = new DialogInterface.OnCancelListener() {
+//        @Override
+//        public void onCancel(DialogInterface dialogInterface) {
+//            shadow.setVisibility(View.GONE);
+//        }
+//    };
 }

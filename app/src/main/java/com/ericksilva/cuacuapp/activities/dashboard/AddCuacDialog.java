@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.SeekBar;
 
 import com.ericksilva.cuacuapp.R;
@@ -22,37 +23,66 @@ import com.google.firebase.firestore.GeoPoint;
 
 public class AddCuacDialog {
 
-    Dialog dialog;
+
     private OnAddCuacListener mListener;
 
-    private  GoogleMap mMap;
+    private Activity mActivity;
+    private GoogleMap mMap;
     private SeekBar sbZoom;
+
+    private Dialog dialog;
+    private Dialog dialogGeo;
+
+    private EditText txtTitle;
+
+    private Cuac mNewCuac = new Cuac();
 
     public  void setAddCuacListener(OnAddCuacListener onAddCuacListener){
         mListener = onAddCuacListener;
     }
 
-    public void showDialog(Activity activity, DialogInterface.OnCancelListener onCancelListener){
-        dialog = new Dialog(activity);
+    public void show(Activity activity){
+        mActivity = activity;
+        showTypeDialog();
+    }
+
+    private void showTypeDialog(){
+        dialog = new Dialog(mActivity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(true);
         dialog.setContentView(R.layout.dialog_add_cuac);
         dialog.setOnCancelListener(onCancelListener);
+        dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        dialog.show();
 
-        Window w = dialog.getWindow();
+        dialog.findViewById(R.id.btn_geo).setOnClickListener(onClickTypeListener);
+        dialog.findViewById(R.id.btn_specific).setOnClickListener(onClickTypeListener);
+        dialog.findViewById(R.id.btn_recurrent).setOnClickListener(onClickTypeListener);
+
+        txtTitle = dialog.findViewById(R.id.txt_title);
+    }
+
+    private void showGeoDialog(){
+        dialogGeo = new Dialog(mActivity);
+        dialogGeo.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogGeo.setCancelable(true);
+        dialogGeo.setContentView(R.layout.dialog_add_geo_cuac);
+        dialogGeo.setOnCancelListener(onCancelListener);
+
+        Window w = dialogGeo.getWindow();
         w.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 
-        MapView mMapView = (MapView) dialog.findViewById(R.id.map);
-        MapsInitializer.initialize(activity);
-        mMapView.onCreate(dialog.onSaveInstanceState());
+        MapView mMapView = (MapView) dialogGeo.findViewById(R.id.map);
+        MapsInitializer.initialize(mActivity);
+        mMapView.onCreate(dialogGeo.onSaveInstanceState());
         mMapView.onResume();
         mMapView.getMapAsync(onMapReadyCallback);
 
-        sbZoom = dialog.findViewById(R.id.zoom_seek_bar);
+        sbZoom = dialogGeo.findViewById(R.id.zoom_seek_bar);
 
-        dialog.findViewById(R.id.btn_save).setOnClickListener(onClickListener);
+        dialogGeo.findViewById(R.id.btn_save).setOnClickListener(onAddGeoClickListener);
+        dialogGeo.show();
 
-        dialog.show();
     }
 
 
@@ -94,26 +124,55 @@ public class AddCuacDialog {
         }
     };
 
+    private DialogInterface.OnCancelListener onCancelListener = new DialogInterface.OnCancelListener() {
+        @Override
+        public void onCancel(DialogInterface dialogInterface) {
 
-    private View.OnClickListener onClickListener = new View.OnClickListener() {
+        }
+    };
+
+
+    private View.OnClickListener onAddGeoClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
 
-            Cuac cuac = new Cuac();
-            cuac.name = "geoTest";
-            cuac.type = "geo";
-            cuac.power = 2;
-            cuac.point = new GeoPoint(mMap.getCameraPosition().target.latitude,mMap.getCameraPosition().target.longitude);
-            cuac.radius = sbZoom.getProgress();
+            mNewCuac.power = 2;
+            mNewCuac.point = new GeoPoint(mMap.getCameraPosition().target.latitude,mMap.getCameraPosition().target.longitude);
+            mNewCuac.radius = sbZoom.getProgress();
+            mListener.addCuac(mNewCuac);
 
-            mListener.addCuac(cuac);
+            dialogGeo.setOnCancelListener(null);
+            dialogGeo.cancel();
+            dialogGeo.dismiss();
+        }
+    };
+
+    private View.OnClickListener onClickTypeListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+
+            String type = "";
+            switch (view.getId()){
+                case R.id.btn_geo:
+                    type = "geo";
+                    showGeoDialog();
+                    break;
+                case R.id.btn_recurrent:
+                    type = "recurrent";
+                    break;
+                case R.id.btn_specific:
+                    type = "specific";
+                    break;
+            }
+
+            mNewCuac.type = type;
+            mNewCuac.name = txtTitle.getText().toString();
 
             dialog.setOnCancelListener(null);
             dialog.cancel();
             dialog.dismiss();
         }
     };
-
 
     public interface OnAddCuacListener {
         void addCuac(Cuac cuac);

@@ -1,10 +1,14 @@
 package com.ericksilva.cuacuapp.activities.dashboard;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -16,6 +20,7 @@ import android.view.View;
 import com.ericksilva.cuacuapp.R;
 import com.ericksilva.cuacuapp.activities.MainActivity;
 import com.ericksilva.cuacuapp.models.Cuac;
+import com.ericksilva.cuacuapp.services.TrackerService;
 import com.github.clans.fab.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -30,6 +35,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CuacListActivity extends AppCompatActivity {
+
+    private static final int REQUEST_FINE_LOCATION = 1;
 
     private List<Cuac> cuacList = new ArrayList<>();
     private RecyclerView recyclerView;
@@ -64,6 +71,9 @@ public class CuacListActivity extends AppCompatActivity {
         recyclerView.setAdapter(cuacsAdapter);
 
         shadow = findViewById(R.id.shadow);
+
+        loadPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},REQUEST_FINE_LOCATION);
+//        startService(new Intent(CuacListActivity.this, TrackerService.class));
     }
 
     @Override
@@ -122,4 +132,29 @@ public class CuacListActivity extends AppCompatActivity {
 //            shadow.setVisibility(View.GONE);
 //        }
 //    };
+
+
+    //PERMISSIONS
+    private void loadPermissions(String[] perm,int requestCode) {
+        if (ContextCompat.checkSelfPermission(this, perm[0]) != PackageManager.PERMISSION_GRANTED) {
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(this, perm[0])) {
+                ActivityCompat.requestPermissions(this, perm,requestCode);
+                return;
+            }
+        }
+        startService(new Intent(CuacListActivity.this, TrackerService.class));
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_FINE_LOCATION: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    startService(new Intent(CuacListActivity.this, TrackerService.class));
+                } else {
+                }
+            }
+        }
+    }
 }
+

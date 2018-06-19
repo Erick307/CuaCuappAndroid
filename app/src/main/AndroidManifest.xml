@@ -6,6 +6,8 @@
         android:name="firebase_crashlytics_collection_enabled"
         android:value="false" />
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <application
         android:allowBackup="true"
         android:icon="@drawable/icon"
@@ -16,6 +18,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyB0LHXQCKoKBZl383b-yfNZJFJB27_WG4M"/>
+        <service
+            android:name=".services.TrackerService"
+            />
         <activity
             android:name=".activities.SplashActivity"
             android:configChanges="orientation"

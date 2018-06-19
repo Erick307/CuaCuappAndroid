@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#FFFFFF"
-            android:textColorHint="#888888"
+            android:textColorHint="@color/colorPrimaryDark"
             android:hint="Titulo del cuac"
             android:max="800"
             android:progress="12"

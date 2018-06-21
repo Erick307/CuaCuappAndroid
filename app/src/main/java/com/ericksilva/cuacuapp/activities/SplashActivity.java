@@ -36,12 +36,12 @@ public class SplashActivity extends AppCompatActivity {
 
             Intent intent;
             FirebaseAuth auth = FirebaseAuth.getInstance();
-            if (auth.getCurrentUser() != null) {
-                intent = new Intent(SplashActivity.this,CuacListActivity.class);
-            } else {
+//            if (auth.getCurrentUser() != null) {
+//                intent = new Intent(SplashActivity.this,CuacListActivity.class);
+//            } else {
                 // not signed in
                 intent = new Intent(SplashActivity.this,OnboardingActivity.class);
-            }
+//            }
             startActivity(intent);
             finish();
         }

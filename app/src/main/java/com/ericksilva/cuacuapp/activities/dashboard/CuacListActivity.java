@@ -18,7 +18,6 @@ import android.util.Log;
 import android.view.View;
 
 import com.ericksilva.cuacuapp.R;
-import com.ericksilva.cuacuapp.activities.MainActivity;
 import com.ericksilva.cuacuapp.models.Cuac;
 import com.ericksilva.cuacuapp.services.TrackerService;
 import com.github.clans.fab.FloatingActionButton;
@@ -50,7 +49,7 @@ public class CuacListActivity extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public static Intent createIntent(Context context){
-        Intent intent = new Intent(context,MainActivity.class);
+        Intent intent = new Intent(context,CuacListActivity.class);
         return intent;
     }
 

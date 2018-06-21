@@ -8,6 +8,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/icon"
@@ -17,10 +18,10 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyB0LHXQCKoKBZl383b-yfNZJFJB27_WG4M"/>
-        <service
-            android:name=".services.TrackerService"
-            />
+            android:value="AIzaSyB0LHXQCKoKBZl383b-yfNZJFJB27_WG4M" />
+
+        <service android:name=".services.TrackerService" />
+
         <activity
             android:name=".activities.SplashActivity"
             android:configChanges="orientation"
@@ -32,9 +33,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.onbording.OnboardingActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.FullScreen" />
+        <activity android:name=".activities.dashboard.CuacListActivity" />
         <activity android:name=".activities.MainActivity" />
-        <activity android:name=".activities.onbording.OnboardingActivity" />
-        <activity android:name=".activities.dashboard.CuacListActivity"></activity>
     </application>
 
 </manifest>

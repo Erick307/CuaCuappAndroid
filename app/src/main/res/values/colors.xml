@@ -6,4 +6,6 @@
     <color name="colorAccentAlfa">#99ff895d</color>
     <color name="background">#d5eeff</color>
     <color name="shadow">#99000000</color>
+    <color name="textColor">#FFFFFF</color>
+
 </resources>

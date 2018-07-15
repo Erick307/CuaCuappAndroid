@@ -13,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
+import com.ericksilva.cuacuapp.activities.alert.AlertActivity;
 import com.ericksilva.cuacuapp.models.Cuac;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -23,6 +24,7 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -32,6 +34,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -44,6 +47,7 @@ public class TrackerService extends Service {
     private Runnable runnable;
     private CollectionReference cuacsRef;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private String uid;
 
     private List<Cuac> cuacList = new ArrayList<>();
 
@@ -84,7 +88,7 @@ public class TrackerService extends Service {
         mGoogleApiClient.connect();
         restartWaiting();
 
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         cuacsRef = db.collection("users/"+ uid +"/cuacs");
         Query query = cuacsRef.whereEqualTo("type", "geo");
         query.addSnapshotListener(mFireStoreListener);
@@ -127,8 +131,8 @@ public class TrackerService extends Service {
         if(mLocationRequest == null) {
             mLocationRequest = LocationRequest.create();
             mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-            mLocationRequest.setInterval(10 * 1000);
-            mLocationRequest.setFastestInterval(5 * 1000);
+            mLocationRequest.setInterval(5 * 1000);
+            mLocationRequest.setFastestInterval(2 * 1000);
         }
         if (ActivityCompat.checkSelfPermission(TrackerService.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(TrackerService.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Log.w("TRACKER", "NoTeniaPermisos");
@@ -147,6 +151,7 @@ public class TrackerService extends Service {
             Log.e("LOCATION","geo:" + myPosition.getLatitude() + "," + myPosition.getLongitude());
 
             for (Cuac cuac:cuacList){
+
                 if (cuac.point !=null){
                     double distance = latLonDistance(myPosition,cuac.point);
 
@@ -157,14 +162,16 @@ public class TrackerService extends Service {
                     Log.e("LOCATION", "--------------------");
 
                     if (distance <= cuac.radius){
+                        Date now = new Date();
+                        if (cuac.lastCuac == null || cuac.lastCuac.getTime() + 30*60*1000 < now.getTime()){
+                            Log.w("CUAC!", "Estamos en un cuac!");
 
-                        Log.w("CUAC!", "Estamos en un cuac!");
-
-                        Intent i = getApplicationContext().getPackageManager().getLaunchIntentForPackage(getApplicationContext().getPackageName());
-                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        getApplicationContext().startActivity(i);
+                            Intent i = AlertActivity.createIntent(getApplicationContext(),cuac);
+                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            getApplicationContext().startActivity(i);
+                        }
                     }
                 }
             }
@@ -190,6 +197,7 @@ public class TrackerService extends Service {
 
             for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()){
                 Cuac cuac = new Cuac(documentSnapshot);
+                cuac.key(documentSnapshot.getId());
                 cuacList.add(cuac);
             }
         }

@@ -29,6 +29,8 @@ public class Cuac extends Model {
     public Date     time;
     public String   days;
 
+    public Date     lastCuac;
+
     public Cuac(){}
 
     public Cuac(DocumentSnapshot document){
@@ -36,13 +38,13 @@ public class Cuac extends Model {
         type    = document.getString("type");
         power   = document.getLong("power") != null ? document.getLong("power") : 0;
 
-        date = document.getDate("date") != null ? document.getDate("date") : new Date();
+        lastCuac = document.getDate("lastCuac");
+        date = document.getDate("date");
 
-        point   = document.getGeoPoint("point") != null ? document.getGeoPoint("point") : new GeoPoint(0,0);
+        point   = document.getGeoPoint("point");
         radius   = document.getLong("radius") != null ? document.getLong("radius") : 0;
-
-        time = document.getDate("time") != null ? document.getDate("time") : new Date();
-        days = document.getString("days") != null ? document.getString("days") : "";
+        time = document.getDate("time");
+        days = document.getString("days");
     }
 
     @NonNull
@@ -52,6 +54,7 @@ public class Cuac extends Model {
         map.put("type", type);
         map.put("power", power);
 
+        if(lastCuac != null) map.put("lastCuac",lastCuac);
         if(date != null) map.put("date", date);
         if(point != null) map.put("point", point);
         if(radius != 0) map.put("radius", radius);

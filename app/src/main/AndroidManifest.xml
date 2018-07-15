@@ -9,6 +9,10 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/icon"
@@ -37,10 +41,11 @@
             android:name=".activities.onbording.OnboardingActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.FullScreen" />
-        <activity android:name=".activities.dashboard.CuacListActivity" />
-        <activity android:name=".activities.MainActivity" />
-        <activity android:name=".activities.cuacdetail.CuacDetailActivity" />
+            android:theme="@style/AppTheme.NoActionBar.FullScreen"/>
+        <activity android:name=".activities.dashboard.CuacListActivity"/>
+        <activity android:name=".activities.MainActivity"/>
+        <activity android:name=".activities.cuacdetail.CuacDetailActivity"/>
+        <activity android:name=".activities.alert.AlertActivity"/>
     </application>
 
 </manifest>

@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.ericksilva.cuacuapp.R;
+import com.ericksilva.cuacuapp.activities.cuacdetail.CuacDetailActivity;
 import com.ericksilva.cuacuapp.models.Cuac;
 import com.ericksilva.cuacuapp.services.TrackerService;
 import com.github.clans.fab.FloatingActionButton;
@@ -28,6 +29,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -41,6 +43,7 @@ public class CuacListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private CuacsAdapter cuacsAdapter;
     private CollectionReference cuacsRef;
+    private ListenerRegistration cuacListenerRegistration;
     private FloatingActionButton btnAdd;
 
     private AddCuacDialog dialog;
@@ -63,7 +66,7 @@ public class CuacListActivity extends AppCompatActivity {
         btnAdd = findViewById(R.id.btn_add);
         btnAdd.setOnClickListener(onClickAddListener);
 
-        cuacsAdapter = new CuacsAdapter(cuacList);
+        cuacsAdapter = new CuacsAdapter(cuacList,onClickSelectCuacListener);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -81,9 +84,14 @@ public class CuacListActivity extends AppCompatActivity {
 
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         cuacsRef = db.collection("users/"+ uid +"/cuacs");
-        cuacsRef.addSnapshotListener(this, eventListener);
+        cuacListenerRegistration = cuacsRef.addSnapshotListener(this, eventListener);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        cuacListenerRegistration.remove();
+    }
 
     EventListener eventListener = new EventListener<QuerySnapshot>() {
         @Override
@@ -99,9 +107,21 @@ public class CuacListActivity extends AppCompatActivity {
 
             for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots.getDocuments()){
                 Cuac cuac = new Cuac(documentSnapshot);
+                cuac.key(documentSnapshot.getId());
                 cuacList.add(cuac);
             }
             cuacsAdapter.notifyDataSetChanged();
+        }
+    };
+
+    View.OnClickListener onClickSelectCuacListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+
+            int itemPosition = recyclerView.getChildLayoutPosition(view);
+            Cuac cuac = cuacList.get(itemPosition);
+            Intent intent = CuacDetailActivity.createIntent(CuacListActivity.this,cuac);
+            startActivity(intent);
         }
     };
 

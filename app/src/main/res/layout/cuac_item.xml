@@ -5,13 +5,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="60dp"
+    android:orientation="vertical"
+    android:id="@+id/btn_cuac"
     >
 
     <TextView
         android:id="@+id/lblname"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="59dp"
         android:text=""
+        android:gravity="center_vertical"
+        android:layout_marginStart="20dp"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorPrimary"
         />
 
 </LinearLayout>

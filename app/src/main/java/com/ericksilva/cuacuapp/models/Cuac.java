@@ -15,6 +15,8 @@ import java.util.Map;
 
 public class Cuac extends Model {
 
+    private String key;
+
     public String   name;
     public String   type;
     public long     power;
@@ -59,4 +61,11 @@ public class Cuac extends Model {
         return map;
     }
 
+    public String key(){
+        return key;
+    }
+
+    public void key(String id){
+        key = id;
+    }
 }

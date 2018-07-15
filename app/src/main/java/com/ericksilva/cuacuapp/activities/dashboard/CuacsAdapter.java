@@ -20,9 +20,11 @@ import java.util.List;
 public class CuacsAdapter extends RecyclerView.Adapter<CuacsAdapter.CuacHolder> {
 
     private List<Cuac>  cuacs;
+    private View.OnClickListener onClickListener;
 
-    public CuacsAdapter(List<Cuac> cuacs) {
+    public CuacsAdapter(List<Cuac> cuacs, View.OnClickListener clickListener) {
         this.cuacs = cuacs;
+        this.onClickListener = clickListener;
     }
 
     //RECYCLE METHODS
@@ -31,6 +33,7 @@ public class CuacsAdapter extends RecyclerView.Adapter<CuacsAdapter.CuacHolder> 
     public CuacHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View item = inflater.inflate(R.layout.cuac_item,parent,false);
+        item.findViewById(R.id.btn_cuac).setOnClickListener(onClickListener);
         return new CuacHolder(item);
     }
 

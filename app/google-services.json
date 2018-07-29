@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "966993293123-dlms0imj85g5hun8u2qupa8skdskv7bv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ericksilva.cuacuapp",
+            "certificate_hash": "e4681c0f6a886a1c07085d4def84219114e378ab"
+          }
+        },
+        {
           "client_id": "966993293123-o1tf5lvbdi0g7om945t68o8mnkuosd5l.apps.googleusercontent.com",
           "client_type": 3
         }

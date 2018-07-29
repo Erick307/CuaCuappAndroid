@@ -26,7 +26,8 @@ public class Cuac extends Model {
     public GeoPoint point;
     public long     radius = 0;
 
-    public Date     time;
+    public long      hour = 25;
+    public long      minute = 61;
     public String   days;
 
     public Date     lastCuac;
@@ -43,7 +44,9 @@ public class Cuac extends Model {
 
         point   = document.getGeoPoint("point");
         radius   = document.getLong("radius") != null ? document.getLong("radius") : 0;
-        time = document.getDate("time");
+
+        hour = document.getLong("hour") != null? document.getLong("hour"): 25;
+        minute = document.getLong("minute") != null? document.getLong("hour"):61;
         days = document.getString("days");
     }
 
@@ -58,7 +61,8 @@ public class Cuac extends Model {
         if(date != null) map.put("date", date);
         if(point != null) map.put("point", point);
         if(radius != 0) map.put("radius", radius);
-        if(time != null) map.put("time", time);
+        if(hour != 25) map.put("hour", hour);
+        if(minute != 61) map.put("minute", minute);
         if(days != null) map.put("days", days);
 
         return map;

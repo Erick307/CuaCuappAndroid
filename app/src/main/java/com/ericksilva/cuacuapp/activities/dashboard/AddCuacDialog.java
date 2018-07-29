@@ -10,6 +10,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.SeekBar;
+import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.ericksilva.cuacuapp.R;
 import com.ericksilva.cuacuapp.models.Cuac;
@@ -20,6 +22,9 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.GeoPoint;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 public class AddCuacDialog {
 
@@ -36,8 +41,10 @@ public class AddCuacDialog {
     private Dialog dialogRecurrent;
 
     private EditText txtTitle;
+    private TimePicker timePicker;
 
     private Cuac mNewCuac = new Cuac();
+    private ArrayList<String> mDays = new ArrayList<>();
 
     public  void setAddCuacListener(OnAddCuacListener onAddCuacListener){
         mListener = onAddCuacListener;
@@ -87,26 +94,44 @@ public class AddCuacDialog {
     }
 
     private void showSpecificDialog(){
-//        dialogSpecific
-//        dialogGeo = new Dialog(mActivity);
-//        dialogGeo.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        dialogGeo.setCancelable(true);
-//        dialogGeo.setContentView(R.layout.dialog_add_geo_cuac);
-//        dialogGeo.setOnCancelListener(onCancelListener);
-//
-//        Window w = dialogGeo.getWindow();
-//        w.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-//
-//        MapView mMapView = (MapView) dialogGeo.findViewById(R.id.map);
-//        MapsInitializer.initialize(mActivity);
-//        mMapView.onCreate(dialogGeo.onSaveInstanceState());
-//        mMapView.onResume();
-//        mMapView.getMapAsync(onMapReadyCallback);
-//
-//        sbZoom = dialogGeo.findViewById(R.id.zoom_seek_bar);
-//
-//        dialogGeo.findViewById(R.id.btn_save).setOnClickListener(onAddGeoClickListener);
-//        dialogGeo.show();
+
+        dialogSpecific = new Dialog(mActivity);
+        dialogSpecific.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogSpecific.setCancelable(true);
+        dialogSpecific.setContentView(R.layout.dialog_add_specific_cuac);
+        dialogSpecific.setOnCancelListener(onCancelListener);
+
+        Window w = dialogSpecific.getWindow();
+        w.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+
+        dialogSpecific.findViewById(R.id.btn_save).setOnClickListener(onAddSpecificClickListener);
+        dialogSpecific.show();
+    }
+
+    private void showRecurrentDialog(){
+
+        dialogRecurrent = new Dialog(mActivity);
+        dialogRecurrent.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogRecurrent.setCancelable(true);
+        dialogRecurrent.setContentView(R.layout.dialog_add_daily_cuac);
+        dialogRecurrent.setOnCancelListener(onCancelListener);
+
+        Window w = dialogRecurrent.getWindow();
+        w.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+
+        dialogRecurrent.findViewById(R.id.btn_sunday).setOnClickListener(onDayListener);
+        dialogRecurrent.findViewById(R.id.btn_monday).setOnClickListener(onDayListener);
+        dialogRecurrent.findViewById(R.id.btn_tuesday).setOnClickListener(onDayListener);
+        dialogRecurrent.findViewById(R.id.btn_wednesday).setOnClickListener(onDayListener);
+        dialogRecurrent.findViewById(R.id.btn_thursday).setOnClickListener(onDayListener);
+        dialogRecurrent.findViewById(R.id.btn_friday).setOnClickListener(onDayListener);
+        dialogRecurrent.findViewById(R.id.btn_saturday).setOnClickListener(onDayListener);
+
+        timePicker = dialogRecurrent.findViewById(R.id.time_picker);
+        timePicker.setIs24HourView(true);
+
+        dialogRecurrent.findViewById(R.id.btn_save).setOnClickListener(onAddRecurrentClickListener);
+        dialogRecurrent.show();
     }
 
 
@@ -171,6 +196,34 @@ public class AddCuacDialog {
         }
     };
 
+    private View.OnClickListener onAddSpecificClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+            mNewCuac.power = 2;
+            mListener.addCuac(mNewCuac);
+
+            dialogGeo.setOnCancelListener(null);
+            dialogGeo.cancel();
+            dialogGeo.dismiss();
+        }
+    };
+
+    private View.OnClickListener onAddRecurrentClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+            mNewCuac.power = 2;
+            mNewCuac.hour = timePicker.getCurrentHour();
+            mNewCuac.minute = timePicker.getCurrentMinute();
+            mListener.addCuac(mNewCuac);
+
+            dialogRecurrent.setOnCancelListener(null);
+            dialogRecurrent.cancel();
+            dialogRecurrent.dismiss();
+        }
+    };
+
     private View.OnClickListener onClickTypeListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -183,10 +236,11 @@ public class AddCuacDialog {
                     break;
                 case R.id.btn_recurrent:
                     type = "recurrent";
-                    showSpecificDialog();
+                    showRecurrentDialog();
                     break;
                 case R.id.btn_specific:
                     type = "specific";
+                    showSpecificDialog();
                     break;
             }
 
@@ -196,6 +250,27 @@ public class AddCuacDialog {
             dialog.setOnCancelListener(null);
             dialog.cancel();
             dialog.dismiss();
+        }
+    };
+
+    private View.OnClickListener onDayListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+
+            String day = (String) view.getTag();
+            Log.e("OldDays",mNewCuac.days!=null?mNewCuac.days:"vacio");
+            if (mNewCuac.days != null && mNewCuac.days.contains(day)){
+                //agregar y seleccionar
+                mNewCuac.days = mNewCuac.days.replace(day,"");
+                view.setBackgroundResource(R.drawable.circle_not_selected);
+                ((TextView)view).setTextColor(mActivity.getResources().getColor(R.color.colorPrimaryDark));
+            }else{
+                //borrar
+                mNewCuac.days = (mNewCuac.days!=null?mNewCuac.days:"") + day;
+                view.setBackgroundResource(R.drawable.circle_selected);
+                ((TextView)view).setTextColor(mActivity.getResources().getColor(R.color.textColor));
+            }
+            Log.e("NewDays",mNewCuac.days.equalsIgnoreCase("")?"vacio":mNewCuac.days);
         }
     };
 

@@ -4,8 +4,10 @@
     <color name="colorPrimaryDark">#1b435d</color>
     <color name="colorAccent">#ff895d</color>
     <color name="colorAccentAlfa">#99ff895d</color>
+    <color name="clearColor">#00000000</color>
     <color name="background">#d5eeff</color>
     <color name="shadow">#99000000</color>
     <color name="textColor">#FFFFFF</color>
+    <color name="textColorHint">#d5eeff</color>
 
 </resources>

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/clearColor"
+    >
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="400dp"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:layout_centerInParent="true"
+        android:background="@color/colorPrimary"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="A que hora?"
+            android:textColor="@color/textColor"
+            />
+
+        <EditText
+            android:id="@+id/txt_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textColor"
+            android:textColorHint="@color/textColorHint"
+            android:hint="22:00hs"
+            android:visibility="gone"
+            />
+
+        <RelativeLayout
+            android:layout_width="280dp"
+            android:layout_height="200dp">
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cuales dias?"
+            android:textColor="@color/textColor"
+            android:layout_marginTop="15dp"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="15dp"
+            android:gravity="center_vertical"
+            >
+
+            <TextView
+                android:id="@+id/btn_sunday"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/circle_not_selected"
+                android:text="D"
+                android:tag="D"
+                android:textColor="@color/colorPrimaryDark"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/btn_monday"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:background="@drawable/circle_not_selected"
+                android:text="L"
+                android:tag="L"
+                android:textColor="@color/colorPrimaryDark"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/btn_tuesday"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:background="@drawable/circle_not_selected"
+                android:text="M"
+                android:tag="M"
+                android:textColor="@color/colorPrimaryDark"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/btn_wednesday"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:background="@drawable/circle_not_selected"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="M"
+                android:tag="W"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/btn_thursday"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:text="J"
+                android:tag="J"
+                android:background="@drawable/circle_not_selected"
+                android:textColor="@color/colorPrimaryDark"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/btn_friday"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:background="@drawable/circle_not_selected"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="V"
+                android:tag="V"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/btn_saturday"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:background="@drawable/circle_not_selected"
+                android:text="S"
+                android:tag="S"
+                android:textColor="@color/colorPrimaryDark"
+                android:gravity="center"
+                />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="Guardar"
+            android:background="@color/colorAccent"
+            android:textColor="#FFFFFF"
+            />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="300dp"
+        android:layout_height="400dp"
+        android:layout_centerInParent="true"
+        android:background="@color/clearColor"
+        >
+        <TimePicker
+            android:id="@+id/time_picker"
+            android:layout_marginTop="-40dp"
+            android:layout_width="300dp"
+            android:layout_height="340dp"
+            android:timePickerMode="clock"
+            android:scaleX="0.55"
+            android:scaleY="0.55"
+            />
+    </RelativeLayout>
+
+</RelativeLayout>

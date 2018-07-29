@@ -18,8 +18,9 @@
             android:id="@+id/txt_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColorHighlight="@color/colorPrimaryDark"
             android:textColor="#FFFFFF"
-            android:textColorHint="@color/colorPrimaryDark"
+            android:textColorHint="@color/textColorHint"
             android:hint="Titulo del cuac"
             android:max="800"
             android:progress="12"
@@ -30,7 +31,7 @@
             android:id="@+id/btn_geo"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:text="Siguiente"
+            android:text="GEOCUACK"
             android:background="@color/colorAccent"
             android:textColor="#FFFFFF"
             android:layout_margin="5dp"
@@ -40,22 +41,20 @@
             android:id="@+id/btn_specific"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:text="DateCuac"
+            android:text="Specific cuacK"
             android:background="@color/colorAccent"
             android:textColor="#FFFFFF"
             android:layout_margin="5dp"
-            android:visibility="gone"
             />
 
         <Button
             android:id="@+id/btn_recurrent"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:text="RecurrentCuac"
+            android:text="daily cuack"
             android:background="@color/colorAccent"
             android:textColor="#FFFFFF"
             android:layout_margin="5dp"
-            android:visibility="gone"
             />
 
     </LinearLayout>

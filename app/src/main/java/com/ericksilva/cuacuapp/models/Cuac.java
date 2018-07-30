@@ -46,7 +46,7 @@ public class Cuac extends Model {
         radius   = document.getLong("radius") != null ? document.getLong("radius") : 0;
 
         hour = document.getLong("hour") != null? document.getLong("hour"): 25;
-        minute = document.getLong("minute") != null? document.getLong("hour"):61;
+        minute = document.getLong("minute") != null? document.getLong("minute"):61;
         days = document.getString("days");
     }
 

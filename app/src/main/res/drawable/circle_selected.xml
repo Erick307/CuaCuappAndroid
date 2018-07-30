@@ -5,5 +5,5 @@
         android:color="@color/colorAccent"/>
     <stroke
         android:width="2dp"
-        android:color="@color/background"/>
+        android:color="@color/white"/>
 </shape>

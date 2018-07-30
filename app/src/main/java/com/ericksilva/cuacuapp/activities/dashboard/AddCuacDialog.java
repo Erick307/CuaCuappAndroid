@@ -258,7 +258,6 @@ public class AddCuacDialog {
         public void onClick(View view) {
 
             String day = (String) view.getTag();
-            Log.e("OldDays",mNewCuac.days!=null?mNewCuac.days:"vacio");
             if (mNewCuac.days != null && mNewCuac.days.contains(day)){
                 //agregar y seleccionar
                 mNewCuac.days = mNewCuac.days.replace(day,"");
@@ -270,7 +269,6 @@ public class AddCuacDialog {
                 view.setBackgroundResource(R.drawable.circle_selected);
                 ((TextView)view).setTextColor(mActivity.getResources().getColor(R.color.textColor));
             }
-            Log.e("NewDays",mNewCuac.days.equalsIgnoreCase("")?"vacio":mNewCuac.days);
         }
     };
 

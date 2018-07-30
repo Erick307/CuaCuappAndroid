@@ -27,6 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:layout_centerInParent="true"
+            android:visibility="gone"
             >
             <com.google.android.gms.maps.MapView
                 android:id="@+id/map"
@@ -51,7 +52,143 @@
             android:progress="12"
             android:layout_below="@id/map_container"
             android:layout_centerHorizontal="true"
+            android:visibility="gone"
             />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:background="@color/clearColor"
+            >
+
+        </RelativeLayout>
+
+        <TimePicker
+            android:id="@+id/time_picker"
+            android:layout_marginTop="-20dp"
+            android:layout_width="300dp"
+            android:layout_height="340dp"
+            android:timePickerMode="clock"
+            android:scaleX="0.55"
+            android:scaleY="0.55"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone"
+            />
+
+        <LinearLayout
+            android:id="@+id/days_container"
+            android:layout_width="280dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_vertical"
+            android:layout_below="@id/time_picker"
+            android:visibility="gone"
+            >
+
+            <TextView
+                android:id="@+id/btn_sunday"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/circle_not_selected"
+                android:text="D"
+                android:tag="D"
+                android:textColor="@color/colorPrimaryDark"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/btn_monday"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:background="@drawable/circle_not_selected"
+                android:text="L"
+                android:tag="L"
+                android:textColor="@color/colorPrimaryDark"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/btn_tuesday"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:background="@drawable/circle_not_selected"
+                android:text="M"
+                android:tag="M"
+                android:textColor="@color/colorPrimaryDark"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/btn_wednesday"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:background="@drawable/circle_not_selected"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="M"
+                android:tag="W"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/btn_thursday"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:text="J"
+                android:tag="J"
+                android:background="@drawable/circle_not_selected"
+                android:textColor="@color/colorPrimaryDark"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/btn_friday"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:background="@drawable/circle_not_selected"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="V"
+                android:tag="V"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/btn_saturday"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:background="@drawable/circle_not_selected"
+                android:text="S"
+                android:tag="S"
+                android:textColor="@color/colorPrimaryDark"
+                android:gravity="center"
+                />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_margin="20dp"
+            android:id="@+id/lbl_days"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Dias:"
+            android:layout_above="@+id/days_container"
+            android:visibility="gone"
+            />
+
     </RelativeLayout>
     <LinearLayout
         android:layout_width="match_parent"

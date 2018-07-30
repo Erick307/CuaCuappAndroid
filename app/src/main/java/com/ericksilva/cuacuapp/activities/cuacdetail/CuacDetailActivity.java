@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.ericksilva.cuacuapp.R;
 import com.ericksilva.cuacuapp.models.Cuac;
@@ -27,6 +28,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.ListenerRegistration;
 
+import java.util.ArrayList;
+
 public class CuacDetailActivity extends AppCompatActivity {
 
     private GoogleMap mMap;
@@ -37,9 +40,13 @@ public class CuacDetailActivity extends AppCompatActivity {
     private ListenerRegistration cuacListenerRegistration;
     private Cuac cuac = new Cuac();
 
+    private ArrayList<View> vDays;
+    private TimePicker timePicker;
+
     public static Intent createIntent(Context context, Cuac cuac){
         Intent intent = new Intent(context,CuacDetailActivity.class);
         intent.putExtra("cuacId",cuac.key());
+        intent.putExtra("type",cuac.type);
         return intent;
     }
 
@@ -48,20 +55,22 @@ public class CuacDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cuac_detail);
 
-        MapView mMapView = (MapView) findViewById(R.id.map);
-        MapsInitializer.initialize(this);
-        mMapView.onCreate(savedInstanceState);
-        mMapView.onResume();
-        mMapView.getMapAsync(onMapReadyCallback);
-
-        sbZoom = findViewById(R.id.zoom_seek_bar);
-        lblTitle = findViewById(R.id.lbl_title);
-        findViewById(R.id.btn_save).setOnClickListener(onSaveClickListener);
-        findViewById(R.id.btn_delete).setOnClickListener(onDeleteClickListener);
-
         Bundle extras = getIntent().getExtras();
         assert extras != null;
         cuac.key(extras.getString("cuacId"));
+        cuac.type = extras.getString("type");
+
+        if (cuac.type.equalsIgnoreCase("geo")){
+            initGeoCuac(savedInstanceState);
+        }else if(cuac.type.equalsIgnoreCase("recurrent")){
+            initRecurrentCuac(savedInstanceState);
+        }else if(cuac.type.equalsIgnoreCase("date")){
+            initDateCuac(savedInstanceState);
+        }
+
+        lblTitle = findViewById(R.id.lbl_title);
+        findViewById(R.id.btn_save).setOnClickListener(onSaveClickListener);
+        findViewById(R.id.btn_delete).setOnClickListener(onDeleteClickListener);
     }
 
     @Override
@@ -76,6 +85,46 @@ public class CuacDetailActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         cuacListenerRegistration.remove();
+    }
+
+    private void initGeoCuac(Bundle savedInstanceState){
+        MapView mMapView = (MapView) findViewById(R.id.map);
+        MapsInitializer.initialize(this);
+        mMapView.onCreate(savedInstanceState);
+        mMapView.onResume();
+        mMapView.getMapAsync(onMapReadyCallback);
+
+        findViewById(R.id.map_container).setVisibility(View.VISIBLE);
+
+        sbZoom = findViewById(R.id.zoom_seek_bar);
+        sbZoom.setVisibility(View.VISIBLE);
+    }
+
+    private void initRecurrentCuac(Bundle savedInstanceState){
+
+        timePicker = findViewById(R.id.time_picker);
+        timePicker.setVisibility(View.VISIBLE);
+        timePicker.setIs24HourView(true);
+
+        findViewById(R.id.lbl_days).setVisibility(View.VISIBLE);
+        findViewById(R.id.days_container).setVisibility(View.VISIBLE);
+
+        vDays = new ArrayList<>();
+        vDays.add(findViewById(R.id.btn_sunday));
+        vDays.add(findViewById(R.id.btn_monday));
+        vDays.add(findViewById(R.id.btn_tuesday));
+        vDays.add(findViewById(R.id.btn_wednesday));
+        vDays.add(findViewById(R.id.btn_thursday));
+        vDays.add(findViewById(R.id.btn_friday));
+        vDays.add(findViewById(R.id.btn_saturday));
+
+        for (View day : vDays){
+            day.setOnClickListener(onDayListener);
+        }
+    }
+
+    private void initDateCuac(Bundle savedInstanceState){
+
     }
 
     EventListener<DocumentSnapshot> cuacListener = new EventListener<DocumentSnapshot>() {
@@ -129,12 +178,42 @@ public class CuacDetailActivity extends AppCompatActivity {
         }
     };
 
+    private View.OnClickListener onDayListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+
+            String day = (String) view.getTag();
+            if (cuac.days != null && cuac.days.contains(day)){
+                cuac.days = cuac.days.replace(day,"");
+                view.setBackgroundResource(R.drawable.circle_not_selected);
+                ((TextView)view).setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+            }else{
+                cuac.days = (cuac.days!=null?cuac.days:"") + day;
+                view.setBackgroundResource(R.drawable.circle_selected);
+                ((TextView)view).setTextColor(getResources().getColor(R.color.textColor));
+            }
+        }
+    };
+
     View.OnClickListener onSaveClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             cuac.power = 2;
-            cuac.point = new GeoPoint(mMap.getCameraPosition().target.latitude,mMap.getCameraPosition().target.longitude);
-            cuac.radius = sbZoom.getProgress();
+
+            if (cuac.type.equalsIgnoreCase("geo")) {
+                cuac.point = new GeoPoint(mMap.getCameraPosition().target.latitude,mMap.getCameraPosition().target.longitude);
+                cuac.radius = sbZoom.getProgress();
+            }else if(cuac.type.equalsIgnoreCase("recurrent")){
+
+                cuac.minute = timePicker.getCurrentMinute();
+                cuac.hour = timePicker.getCurrentHour();
+//                cuac.days Este no hace falta porque se actualiza apensa lo tocas
+
+            }else if(cuac.type.equalsIgnoreCase("date")){
+
+            }
+
+
             cuacRef.update(cuac.getMap());
             finish();
         }
@@ -152,12 +231,45 @@ public class CuacDetailActivity extends AppCompatActivity {
     private void updateView(){
         if (cuac.name == null) return;
 
+        if (cuac.type.equalsIgnoreCase("geo")){
+            updateGeoCuac();
+        }else if(cuac.type.equalsIgnoreCase("recurrent")){
+            updateRecurrentCuac();
+        }else if(cuac.type.equalsIgnoreCase("date")){
+            updateDateCuac();
+        }
+
+        lblTitle.setText(cuac.name);
+    }
+
+    private void updateGeoCuac(){
         sbZoom.setProgress((int) cuac.radius);
         if(mMap != null){
             LatLng latLng = new LatLng(cuac.point.getLatitude(),cuac.point.getLongitude());
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,18 - (float)cuac.radius/(float)100));
         }
-
-        lblTitle.setText(cuac.name);
     }
+
+    private void updateRecurrentCuac(){
+
+        timePicker.setCurrentHour((int)cuac.hour);
+        timePicker.setCurrentMinute((int)cuac.minute);
+
+        for (View view : vDays){
+            String tag = (String)view.getTag();
+            if (cuac.days.contains(tag)){
+                view.setBackgroundResource(R.drawable.circle_selected);
+                ((TextView)view).setTextColor(getResources().getColor(R.color.textColor));
+            }else{
+                view.setBackgroundResource(R.drawable.circle_not_selected);
+                ((TextView)view).setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+            }
+
+        }
+    }
+
+    private void updateDateCuac(){
+
+    }
+
 }
